@@ -1,9 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
-// import NavugationContainer and StackNavigtator
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { HomeScreen } from "./screens/HomeScreen";
-// import useFonts from expo-font
 import {
   useFonts,
   Lato_300Light,
@@ -11,6 +9,7 @@ import {
   Lato_700Bold,
 } from "@expo-google-fonts/lato";
 import DummyScreen from "./screens/DummyScreen";
+import DetailsScreen from "./screens/DetailsScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -28,11 +27,15 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        screenOptions={{ headerShown: false, statusBarStyle: "dark" }}
-        initialRouteName="Dummy"
+        screenOptions={{
+          headerShown: false,
+          statusBarStyle: "dark",
+          statusBarTranslucent: true,
+        }}
       >
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Dummy" component={DummyScreen} />
+        <Stack.Screen name="Details" component={DetailsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
