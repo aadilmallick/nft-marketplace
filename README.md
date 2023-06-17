@@ -18,6 +18,26 @@ The `className` attribute when using nativewind will not be recognized, so to ge
    "types": "my-app.d.ts"
    ```
 
+## Stack Navigator and statusbar
+
+```javascript
+<Stack.Navigator
+  screenOptions={{
+    headerShown: false,
+    statusBarStyle: "dark",
+    statusBarTranslucent: true,
+  }}
+>
+  // screens here
+</Stack.Navigator>
+```
+
+## Styling quirks
+
+- You can't translate in `transform` by a percentage. You can only use fixed width values.
+- Shadows don't work in nativewind. You have to use your own custom shadows.
+- The `inset` property in nativewind doesn't work.
+
 ## Fonts
 
 ### 1. Download the font
@@ -117,6 +137,23 @@ Make sure to not use font weight when doing this, as it will not work, and the f
 
 ## Importing assets folder structure
 
+1.  Create a file that imports each individual image from the asset folder. Then export them. They will resolve to strings at runtime. This is the only way to import images in react native.
+
+    ```javascript
+    // assets.js
+    import logo from "./assets/logo.png";
+    import avatar from "./assets/avatar.png";
+
+    export default { logo, avatar };
+    ```
+
+2.  Import the file using the assets file you created.
+
+    ```javascript
+    import assets from "../data/assets";
+    return <img src={assets.img1} />;
+    ```
+
 ## Flatlist styling
 
 ### Normal flatlist
@@ -156,14 +193,58 @@ export const HomeScreen = () => {
 
 ## Shadows
 
-The nativewind shadow styles don't work, so we have to use our own.
+The nativewind shadow styles don't work, so we have to use our own. If at any time your shadows look wonky, check the padding around your elements. Maybe your padding is too small, and the shadow is being cut off.
 
 ### Shadows in flatlist
 
 In a `<FlatList>` component, you'll get a weird bug where the shadows will only show straight down. The way to fix this is to introduce horizontal padding on the `contentContainerStyle` prop.
 
+- Use the `contentContainerStyle` prop to add padding to the flatlist, as `className` will not work.
+
 ```javascript
 <View className="absolute w-full py-8 h-full">
   <FlatList contentContainerStyle={{ padding: 20 }} />
+</View>
+```
+
+## Keyboard Avoiding View
+
+```javascript
+
+```
+
+## UI stuff
+
+### People bar
+
+```javascript
+export const PeopleBar = () => {
+  return (
+    <View className="absolute bottom-0 left-0 flex flex-row translate-y-4 translate-x-4">
+      {[assets.person04, assets.person02, assets.person03].map((imgPath) => {
+        return (
+          <Image
+            source={imgPath}
+            key={imgPath}
+            className="h-8 w-8 rounded-full -mr-2"
+          />
+        );
+      })}
+    </View>
+  );
+};
+```
+
+### Search bar
+
+```javascript
+<View className="flex flex-row items-center my-2 bg-teal-500 rounded-full py-1 px-2">
+  <AntDesign name="search1" size={24} color="white" />
+  <TextInput
+    placeholder="Search away..."
+    className="font-lato text-base px-1 flex-1 h-full"
+    value={searchValue}
+    onChangeText={setSearchValue}
+  />
 </View>
 ```
